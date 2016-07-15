@@ -1,0 +1,12 @@
+{
+  "name": "steembot",
+  "version": "0.0.1",
+  "private": false,
+  "dependencies": {
+    "node-telegram-bot-api": "^0.23.3",
+    "steem-rpc": "^0.5.1",
+    "superagent": "^2.1.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {}
+}
