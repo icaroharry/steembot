@@ -26,7 +26,11 @@ bot.onText(/recommend(ed|ing|ed|ation|ations|)/, function(msg, match) {
               bot.sendMessage(chatId, `https://www.steemit.com${post.url}`);
             });
           });
-        })
+        }, err => {
+          if(err) {
+            bot.sendMessage(chatId, `Sorry, I'm having some issues trying to read the Steem database. Can you try again later?`);
+          }
+        });
       });
   });
 });
@@ -37,7 +41,11 @@ bot.onText(/accounts|steemers|steemians|users/, function (msg, match) {
     api.database_api().exec("get_account_count", []).then(response => {
       let msg = `This is easy! The current number of ${match} is ${response} and growing! \u{1F4C8}`;
       bot.sendMessage(chatId, msg);
-    })
+    }, err => {
+      if(err) {
+        bot.sendMessage(chatId, `Sorry, I'm having some issues trying to read the Steem database. Can you try again later?`);
+      }
+    });
   });
 });
 
@@ -50,7 +58,11 @@ bot.onText(/trending|trends/, function (msg, match) {
         response.forEach((post) => {
           bot.sendMessage(chatId, `https://www.steemit.com${post.url}`);
         });
-      })
+      }, err => {
+        if(err) {
+          bot.sendMessage(chatId, `Sorry, I'm having some issues trying to read the Steem database. Can you try again later?`);
+        }
+      });
     });
   });
 });
