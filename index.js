@@ -4,11 +4,17 @@ const request = require('superagent');
 const _ = require('underscore');
 
 const token = '250070713:AAGgsvIwc1ysnONUyR3qIKSFbz9VtrTuCn8';
-const options = {};
+const options = {
+  url: "ws://127.0.0.1:8092"
+};
 
 // Setup polling way
-const bot = new TelegramBot(token, {polling: true});
-const api = Client.get(options, true);
+const bot = new TelegramBot(token, { polling: {
+  timeout: 0,
+  interval: 2000
+}});
+//let api;
+let api = Client.get(options, true);
 
 // Jared stuff
 
@@ -37,15 +43,21 @@ bot.onText(/recommend(ed|ing|ed|ation|ations|)/, function(msg, match) {
 
 bot.onText(/accounts|steemers|steemians|users/, function (msg, match) {
   let chatId = msg.chat.id;
+  api = Client.get(options, true);
+  console.log(api);
   api.initPromise.then(response => {
+    console.log(response);
     api.database_api().exec("get_account_count", []).then(response => {
       let msg = `This is easy! The current number of ${match} is ${response} and growing! \u{1F4C8}`;
       bot.sendMessage(chatId, msg);
     }, err => {
       if(err) {
+        console.log("ferrou"+err);
         bot.sendMessage(chatId, `Sorry, I'm having some issues trying to read the Steem database. Can you try again later?`);
       }
     });
+  }, err => {
+    console.log(err);
   });
 });
 
