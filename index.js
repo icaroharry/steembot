@@ -5,15 +5,14 @@ const _ = require('underscore');
 
 const token = '250070713:AAGgsvIwc1ysnONUyR3qIKSFbz9VtrTuCn8';
 const options = {
-  url: "ws://127.0.0.1:8092"
+  url: "wss://this.piston.rocks"
 };
 
 // Setup polling way
 const bot = new TelegramBot(token, { polling: {
-  timeout: 0,
+  timeout: 2000,
   interval: 2000
 }});
-//let api;
 let api = Client.get(options, true);
 
 // Jared stuff
@@ -43,7 +42,6 @@ bot.onText(/recommend(ed|ing|ed|ation|ations|)/, function(msg, match) {
 
 bot.onText(/accounts|steemers|steemians|users/, function (msg, match) {
   let chatId = msg.chat.id;
-  api = Client.get(options, true);
   console.log(api);
   api.initPromise.then(response => {
     console.log(response);
@@ -52,7 +50,7 @@ bot.onText(/accounts|steemers|steemians|users/, function (msg, match) {
       bot.sendMessage(chatId, msg);
     }, err => {
       if(err) {
-        console.log("ferrou"+err);
+        console.log(err);
         bot.sendMessage(chatId, `Sorry, I'm having some issues trying to read the Steem database. Can you try again later?`);
       }
     });
